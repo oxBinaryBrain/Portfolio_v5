@@ -29,105 +29,152 @@ export function HeroWorkScrollStack({ heroDelay = 4 }: HeroWorkScrollStackProps)
   const card3Ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const isDesktop = window.matchMedia("(min-width: 768px)").matches;
+    let ctx: gsap.Context | undefined;
+    let cancelled = false;
 
-    const ctx = gsap.context(() => {
-      const cardRefs = [card1Ref.current, card2Ref.current, card3Ref.current];
-      const placeholder = placeholderRef.current;
-      if (!placeholder) return;
+    const setupAnimation = () => {
+      if (cancelled) return;
 
-      const placeholderRect = placeholder.getBoundingClientRect();
-      const placeholderCenterY =
-        placeholderRect.top + placeholderRect.height / 2;
+      ctx?.revert();
 
-      if (isDesktop) {
-        const xOffsets = ["32rem", "14.5rem", "-1.8rem"];
-        const yAdjustments = [0, -48, 0];
-        const rotations = [-5, 0, 5];
-        const scales = [1.35, 1.3, 1.25];
-        const zIndexes = [30, 20, 10];
+      const isDesktop = window.matchMedia("(min-width: 768px)").matches;
 
-        const tl = gsap.timeline({
-          scrollTrigger: {
-            trigger: animationRef.current,
-            start: "top top",
-            end: "bottom bottom",
-            scrub: 1,
-          },
-        });
+      ctx = gsap.context(() => {
+        const cardRefs = [card1Ref.current, card2Ref.current, card3Ref.current];
+        const placeholder = placeholderRef.current;
+        const container = animationRef.current;
+        if (!placeholder || !container) return;
 
-        cardRefs.forEach((card, i) => {
-          if (!card) return;
-          const cardRect = card.getBoundingClientRect();
-          const cardCenterY = cardRect.top + cardRect.height / 2;
-          const yOffset = placeholderCenterY - cardCenterY;
+        const placeholderRect = placeholder.getBoundingClientRect();
+        const placeholderCenterY =
+          placeholderRect.top + placeholderRect.height / 2;
 
-          gsap.set(card, {
-            x: xOffsets[i],
-            y: yOffset + yAdjustments[i],
-            rotation: rotations[i],
-            scale: scales[i],
-            zIndex: zIndexes[i],
-            willChange: "transform",
-            force3D: true,
+        if (isDesktop) {
+          const xOffsets = ["32rem", "14.5rem", "-1.8rem"];
+          const yAdjustments = [0, -48, 0];
+          const rotations = [-5, 0, 5];
+          const scales = [1.35, 1.3, 1.25];
+          const zIndexes = [30, 20, 10];
+
+          const tl = gsap.timeline({
+            scrollTrigger: {
+              trigger: container,
+              start: "top top",
+              end: "bottom bottom",
+              scrub: 1,
+              invalidateOnRefresh: true,
+            },
           });
 
-          tl.to(
-            card,
-            {
+          cardRefs.forEach((card, i) => {
+            if (!card) return;
+            const cardRect = card.getBoundingClientRect();
+            const cardCenterY = cardRect.top + cardRect.height / 2;
+            const yOffset = placeholderCenterY - cardCenterY;
+
+            gsap.set(card, {
+              x: xOffsets[i],
+              y: yOffset + yAdjustments[i],
+              rotation: rotations[i],
+              scale: scales[i],
+              zIndex: zIndexes[i],
+              willChange: "transform",
+              force3D: true,
+            });
+
+            tl.to(
+              card,
+              {
+                x: 0,
+                y: 0,
+                rotation: 0,
+                scale: 1,
+                duration: 0.4,
+                ease: "none",
+              },
+              0,
+            );
+            tl.to(card, { zIndex: 1, duration: 0.1, ease: "none" }, 0.3);
+          });
+        } else {
+          const xOffsets = ["2.5rem", "0.5rem", "-1rem"];
+          const yAdjustments = [-10, -30, 10];
+          const rotations = [-5, 0, 5];
+          const scales = [0.65, 0.7, 0.75];
+          const zIndexes = [30, 20, 10];
+
+          cardRefs.forEach((card, i) => {
+            if (!card) return;
+            const cardRect = card.getBoundingClientRect();
+            const cardCenterY = cardRect.top + cardRect.height / 2;
+            const yOffset = placeholderCenterY - cardCenterY;
+
+            gsap.set(card, {
+              x: xOffsets[i],
+              y: yOffset + yAdjustments[i],
+              rotation: rotations[i],
+              scale: scales[i],
+              zIndex: zIndexes[i],
+              willChange: "transform",
+              force3D: true,
+            });
+
+            gsap.to(card, {
               x: 0,
               y: 0,
               rotation: 0,
               scale: 1,
-              duration: 0.4,
-              ease: "none",
-            },
-            0,
-          );
-          tl.to(card, { zIndex: 1, duration: 0.1, ease: "none" }, 0.3);
-        });
-      } else {
-        const xOffsets = ["2.5rem", "0.5rem", "-1rem"];
-        const yAdjustments = [-10, -30, 10];
-        const rotations = [-5, 0, 5];
-        const scales = [0.65, 0.7, 0.75];
-        const zIndexes = [30, 20, 10];
-
-        cardRefs.forEach((card, i) => {
-          if (!card) return;
-          const cardRect = card.getBoundingClientRect();
-          const cardCenterY = cardRect.top + cardRect.height / 2;
-          const yOffset = placeholderCenterY - cardCenterY;
-
-          gsap.set(card, {
-            x: xOffsets[i],
-            y: yOffset + yAdjustments[i],
-            rotation: rotations[i],
-            scale: scales[i],
-            zIndex: zIndexes[i],
-            willChange: "transform",
-            force3D: true,
+              duration: 1.2,
+              ease: "power2.inOut",
+              scrollTrigger: {
+                trigger: placeholder,
+                start: "top 35%",
+                toggleActions: "play none none reverse",
+                invalidateOnRefresh: true,
+              },
+            });
           });
+        }
+      }, animationRef);
 
-          gsap.to(card, {
-            x: 0,
-            y: 0,
-            rotation: 0,
-            scale: 1,
-            duration: 1.2,
-            ease: "power2.inOut",
-            scrollTrigger: {
-              trigger: placeholder,
-              start: "top 35%",
-              toggleActions: "play none none reverse",
-            },
-          });
-        });
+      requestAnimationFrame(() => {
+        ScrollTrigger.refresh();
+      });
+    };
+
+    const init = async () => {
+      if (document.fonts?.ready) {
+        await document.fonts.ready;
       }
-    }, animationRef);
 
-    return () => ctx.revert();
-  }, []);
+      if (cancelled) return;
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(setupAnimation);
+      });
+    };
+
+    void init();
+
+    const refresh = () => ScrollTrigger.refresh();
+    window.addEventListener("load", refresh);
+    window.addEventListener("resize", refresh);
+
+    const heroRefreshTimer =
+      heroDelay > 0
+        ? window.setTimeout(() => {
+            setupAnimation();
+          }, heroDelay * 1000)
+        : undefined;
+
+    return () => {
+      cancelled = true;
+      if (heroRefreshTimer) window.clearTimeout(heroRefreshTimer);
+      window.removeEventListener("load", refresh);
+      window.removeEventListener("resize", refresh);
+      ctx?.revert();
+    };
+  }, [heroDelay]);
 
   const cardRefs = [card1Ref, card2Ref, card3Ref];
 
@@ -217,8 +264,8 @@ export function HeroWorkScrollStack({ heroDelay = 4 }: HeroWorkScrollStackProps)
       </div>
 
       <div id="work" data-section="work">
-        <section aria-label="Work section" className="py-20 md:pt-0">
-          <div className="flex w-content-width flex-col gap-8 mx-auto">
+        <section aria-label="Work section" className="relative overflow-visible py-20 md:pt-0">
+          <div className="flex w-content-width flex-col gap-8 mx-auto overflow-visible">
             <div className="flex flex-col items-center gap-2">
               <div className="card mb-1 w-fit rounded px-3 py-1 text-sm">
                 <p>Selected Work</p>
@@ -238,13 +285,14 @@ export function HeroWorkScrollStack({ heroDelay = 4 }: HeroWorkScrollStackProps)
               />
             </div>
 
-            <div className="grid gap-5 md:grid-cols-3">
+            <div className="relative grid gap-5 overflow-visible md:grid-cols-3">
               {featuredProjects.map((project, index) => (
                 <ProjectCard
                   key={project.slug}
                   project={project}
                   cardRef={cardRefs[index]}
                   featured
+                  scrollAnimated
                   onSelect={setSelectedProject}
                 />
               ))}

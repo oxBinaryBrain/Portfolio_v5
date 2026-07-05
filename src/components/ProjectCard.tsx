@@ -8,6 +8,7 @@ interface ProjectCardProps {
   project: Project;
   cardRef?: RefObject<HTMLDivElement | null>;
   featured?: boolean;
+  scrollAnimated?: boolean;
   onSelect?: (project: Project) => void;
 }
 
@@ -15,6 +16,7 @@ export function ProjectCard({
   project,
   cardRef,
   featured = false,
+  scrollAnimated = false,
   onSelect,
 }: ProjectCardProps) {
   const interactive = Boolean(onSelect);
@@ -35,9 +37,9 @@ export function ProjectCard({
         <div
           ref={cardRef}
           className={cls(
-            "card relative aspect-4/3 rounded-2xl p-2 transition-transform duration-300 xl:p-3 2xl:p-4",
+            "card relative aspect-4/3 rounded-2xl p-2 xl:p-3 2xl:p-4",
             featured && "shadow-2xl",
-            interactive && "group-hover:-translate-y-1",
+            !scrollAnimated && interactive && "transition-transform duration-300 group-hover:-translate-y-1",
           )}
         >
           <div className="relative aspect-4/3 h-full w-full overflow-hidden rounded-xl">
