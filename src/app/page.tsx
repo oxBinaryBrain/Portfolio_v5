@@ -11,25 +11,30 @@ import { Navbar } from "@/components/Navbar";
 import { ServicesSection } from "@/components/ServicesSection";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
 import { LoaderReveal } from "@/components/ui/LoaderReveal";
+import { useIntroSession } from "@/hooks/useIntroSession";
 
 export default function Home() {
+  const { skipIntro, navbarDelay, heroDelay } = useIntroSession();
+
   return (
     <>
-      <LoaderReveal imageSrc="/images/avatar.png" title="UDAY" />
+      {!skipIntro && (
+        <LoaderReveal imageSrc="/images/avatar.png" title="UDAY" />
+      )}
       <CornerGlowBackground position="fixed" />
       <motion.div
-        initial={{ y: -100, opacity: 0 }}
+        initial={skipIntro ? false : { y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{
           duration: 0.6,
-          delay: 4.5,
+          delay: navbarDelay,
           ease: [0.22, 1, 0.36, 1],
         }}
       >
         <Navbar />
       </motion.div>
       <main className="flex-grow">
-        <HeroWorkScrollStack />
+        <HeroWorkScrollStack heroDelay={heroDelay} />
         <TestimonialsSection />
         <AboutSection />
         <ServicesSection />

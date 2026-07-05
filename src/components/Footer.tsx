@@ -1,12 +1,14 @@
 "use client";
 
+import Link from "next/link";
 import { AutoFillText } from "@/components/ui/AutoFillText";
-import { TwitterIcon, LinkedInIcon, InstagramIcon } from "@/components/icons";
+import { GitHubIcon, LinkedInIcon, TwitterIcon } from "@/components/icons";
+import { socialNavItems } from "@/lib/socials";
 
 const socialIcons = [
-  { Icon: TwitterIcon, label: "Twitter" },
-  { Icon: LinkedInIcon, label: "LinkedIn" },
-  { Icon: InstagramIcon, label: "Instagram" },
+  { Icon: GitHubIcon, label: "GitHub", href: socialNavItems[0].href },
+  { Icon: LinkedInIcon, label: "LinkedIn", href: socialNavItems[1].href },
+  { Icon: TwitterIcon, label: "Twitter", href: socialNavItems[2].href },
 ];
 
 export function Footer() {
@@ -22,15 +24,17 @@ export function Footer() {
             © 2026 UDAY. All rights reserved.
           </span>
           <div className="flex items-center gap-3">
-            {socialIcons.map(({ Icon, label }) => (
-              <button
+            {socialIcons.map(({ Icon, label, href }) => (
+              <Link
                 key={label}
-                type="button"
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
                 aria-label={label}
-                className="primary-button flex size-10 cursor-pointer items-center justify-center rounded-full text-primary-cta-text"
+                className="primary-button flex size-10 items-center justify-center rounded-full text-primary-cta-text"
               >
                 <Icon className="size-4" />
-              </button>
+              </Link>
             ))}
           </div>
         </div>

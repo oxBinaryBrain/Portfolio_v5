@@ -8,16 +8,20 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { ProjectCard } from "@/components/ProjectCard";
+import { ProjectDetailModal } from "@/components/ProjectDetailModal";
 import { ProjectsModal } from "@/components/ProjectsModal";
 import { TextAnimation } from "@/components/ui/TextAnimation";
-import { featuredProjects } from "@/types/content";
+import { featuredProjects, type Project } from "@/types/content";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const HERO_DELAY = 4;
+interface HeroWorkScrollStackProps {
+  heroDelay?: number;
+}
 
-export function HeroWorkScrollStack() {
+export function HeroWorkScrollStack({ heroDelay = 4 }: HeroWorkScrollStackProps) {
   const [projectsModalOpen, setProjectsModalOpen] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const animationRef = useRef<HTMLDivElement>(null);
   const placeholderRef = useRef<HTMLDivElement>(null);
   const card1Ref = useRef<HTMLDivElement>(null);
@@ -142,7 +146,7 @@ export function HeroWorkScrollStack() {
                 transition={{
                   duration: 1.8,
                   ease: [0.16, 1, 0.3, 1],
-                  delay: HERO_DELAY,
+                  delay: heroDelay,
                 }}
                 className="flex w-full flex-col items-center gap-3 md:w-[46%] md:items-start"
               >
@@ -237,10 +241,11 @@ export function HeroWorkScrollStack() {
             <div className="grid gap-5 md:grid-cols-3">
               {featuredProjects.map((project, index) => (
                 <ProjectCard
-                  key={project.title}
+                  key={project.slug}
                   project={project}
                   cardRef={cardRefs[index]}
                   featured
+                  onSelect={setSelectedProject}
                 />
               ))}
             </div>
@@ -261,6 +266,11 @@ export function HeroWorkScrollStack() {
       <ProjectsModal
         open={projectsModalOpen}
         onClose={() => setProjectsModalOpen(false)}
+        onProjectSelect={setSelectedProject}
+      />
+      <ProjectDetailModal
+        project={selectedProject}
+        onClose={() => setSelectedProject(null)}
       />
     </div>
   );

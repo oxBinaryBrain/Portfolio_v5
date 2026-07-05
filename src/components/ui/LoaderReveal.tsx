@@ -2,7 +2,8 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { hasSeenIntro, markIntroSeen } from "@/lib/intro";
 
 interface LoaderRevealProps {
   imageSrc: string;
@@ -14,8 +15,22 @@ export function LoaderReveal({ imageSrc, title, onComplete }: LoaderRevealProps)
   const [isVisible, setIsVisible] = useState(true);
   const [introComplete, setIntroComplete] = useState(false);
 
+  useEffect(() => {
+    if (hasSeenIntro()) {
+      setIsVisible(false);
+      onComplete?.();
+    }
+  }, [onComplete]);
+
+  const handleExitComplete = () => {
+    markIntroSeen();
+    onComplete?.();
+  };
+
+  if (!isVisible) return null;
+
   return (
-    <AnimatePresence onExitComplete={onComplete}>
+    <AnimatePresence onExitComplete={handleExitComplete}>
       {isVisible && (
         <motion.div className="fixed inset-0 z-100 text-primary-cta-text">
           <motion.div

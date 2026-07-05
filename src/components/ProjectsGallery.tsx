@@ -4,16 +4,18 @@ import { useMemo, useState } from "react";
 import { ProjectCard } from "@/components/ProjectCard";
 import { SelectorButton } from "@/components/ui/SelectorButton";
 import { TextAnimation } from "@/components/ui/TextAnimation";
-import { allProjects, projectCategories } from "@/types/content";
+import { allProjects, projectCategories, type Project } from "@/types/content";
 
 interface ProjectsGalleryProps {
   showHeader?: boolean;
   className?: string;
+  onProjectSelect?: (project: Project) => void;
 }
 
 export function ProjectsGallery({
   showHeader = true,
   className,
+  onProjectSelect,
 }: ProjectsGalleryProps) {
   const [activeCategory, setActiveCategory] = useState("All");
 
@@ -63,7 +65,11 @@ export function ProjectsGallery({
 
       <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
         {filteredProjects.map((project) => (
-          <ProjectCard key={project.title} project={project} />
+          <ProjectCard
+            key={project.slug}
+            project={project}
+            onSelect={onProjectSelect}
+          />
         ))}
       </div>
     </div>

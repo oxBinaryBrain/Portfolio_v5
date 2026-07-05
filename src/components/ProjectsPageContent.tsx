@@ -3,12 +3,17 @@
 import { motion } from "framer-motion";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
 import { CornerGlowBackground } from "@/components/CornerGlowBackground";
-import { Navbar } from "@/components/Navbar";
-import { ProjectsGallery } from "@/components/ProjectsGallery";
 import { Footer } from "@/components/Footer";
+import { Navbar } from "@/components/Navbar";
+import { ProjectDetailModal } from "@/components/ProjectDetailModal";
+import { ProjectsGallery } from "@/components/ProjectsGallery";
+import type { Project } from "@/types/content";
 
 export function ProjectsPageContent() {
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+
   return (
     <>
       <CornerGlowBackground position="fixed" />
@@ -27,11 +32,15 @@ export function ProjectsPageContent() {
               <ArrowLeft className="size-4" />
               Back to home
             </Link>
-            <ProjectsGallery />
+            <ProjectsGallery onProjectSelect={setSelectedProject} />
           </motion.div>
         </div>
       </main>
       <Footer />
+      <ProjectDetailModal
+        project={selectedProject}
+        onClose={() => setSelectedProject(null)}
+      />
     </>
   );
 }

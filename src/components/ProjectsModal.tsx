@@ -6,13 +6,19 @@ import { X } from "lucide-react";
 import Link from "next/link";
 import { useEffect } from "react";
 import { ProjectsGallery } from "@/components/ProjectsGallery";
+import type { Project } from "@/types/content";
 
 interface ProjectsModalProps {
   open: boolean;
   onClose: () => void;
+  onProjectSelect?: (project: Project) => void;
 }
 
-export function ProjectsModal({ open, onClose }: ProjectsModalProps) {
+export function ProjectsModal({
+  open,
+  onClose,
+  onProjectSelect,
+}: ProjectsModalProps) {
   const lenis = useLenis();
 
   useEffect(() => {
@@ -88,7 +94,10 @@ export function ProjectsModal({ open, onClose }: ProjectsModalProps) {
             </div>
 
             <div className="overflow-y-auto px-5 py-8 md:px-8 md:py-10">
-              <ProjectsGallery showHeader={false} />
+              <ProjectsGallery
+                showHeader={false}
+                onProjectSelect={onProjectSelect}
+              />
             </div>
           </motion.div>
         </div>

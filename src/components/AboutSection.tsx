@@ -1,16 +1,18 @@
 "use client";
 
 import { motion, useScroll, useTransform } from "framer-motion";
-import { Globe, Quote } from "lucide-react";
+import { Quote } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRef } from "react";
+import { GitHubIcon, LinkedInIcon, TwitterIcon } from "@/components/icons";
 import { TextAnimation } from "@/components/ui/TextAnimation";
+import { socialNavItems } from "@/lib/socials";
 
-const socials = [
-  { label: "Twitter", href: "#" },
-  { label: "LinkedIn", href: "#" },
-  { label: "Instagram", href: "#" },
+const aboutSocials = [
+  { label: "GitHub", href: socialNavItems[0].href, Icon: GitHubIcon },
+  { label: "LinkedIn", href: socialNavItems[1].href, Icon: LinkedInIcon },
+  { label: "Twitter", href: socialNavItems[2].href, Icon: TwitterIcon },
 ];
 
 export function AboutSection() {
@@ -40,9 +42,7 @@ export function AboutSection() {
                 className="text-4xl leading-[1.15] font-semibold text-balance md:text-5xl"
               />
               <div className="flex min-w-0 items-center gap-2">
-                <span className="truncate text-base font-medium">
-                  UDAY
-                </span>
+                <span className="truncate text-base font-medium">UDAY</span>
                 <span className="shrink-0 text-accent">•</span>
                 <span className="truncate text-base font-medium">
                   Full-Stack Developer
@@ -67,13 +67,15 @@ export function AboutSection() {
               />
             </motion.div>
             <div className="absolute inset-x-0 bottom-0 flex flex-wrap items-end justify-center gap-3 p-6 xl:p-7 2xl:p-8">
-              {socials.map((social) => (
+              {aboutSocials.map((social) => (
                 <Link
                   key={social.label}
                   href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="flex h-9 items-center justify-center gap-2 rounded-full border border-primary-cta-text/20 bg-primary-cta-text/15 px-3 text-sm font-medium text-primary-cta-text backdrop-blur-xl transition-all duration-300 ease-out hover:bg-primary-cta-text/25"
                 >
-                  <Globe className="size-4" strokeWidth={1.5} />
+                  <social.Icon className="size-4" />
                   <span>{social.label}</span>
                 </Link>
               ))}
