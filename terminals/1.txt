@@ -1,0 +1,49 @@
+---
+pid: 2672
+cwd: "D:\Webild\Creative portfolio"
+command: "Set-Location \"D:\\Webild\\Creative portfolio\"; npx create-next-app@latest temp-scaffold --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --turbopack --yes; Move-Item -Path \"temp-scaffold\\*\" -Destination \".\" -Force; Move-Item -Path \"temp-scaffold\\.*\" -Destination \".\" -Force -ErrorAction SilentlyContinue; Remove-Item -Path \"temp-scaffold\" -Recurse -Force"
+started_at: 2026-07-05T11:55:42.733Z
+running_for_ms: 6545011  
+---
+Creating a new Next.js app in D:\Webild\Creative portfolio\temp-scaffold.
+
+Using npm.
+
+Initializing project with template: app-tw 
+
+
+Installing dependencies:
+- next
+- react
+- react-dom
+
+Installing devDependencies:
+- @tailwindcss/postcss
+- @types/node
+- @types/react
+- @types/react-dom
+- eslint
+- eslint-config-next
+- tailwindcss
+- typescript
+
+
+added 356 packages, and audited 357 packages in 1m
+
+145 packages are looking for funding
+  run `npm fund` for details
+
+2 moderate severity vulnerabilities
+
+To address all issues (including breaking changes), run:
+  npm audit fix --force
+
+Run `npm audit` for details.
+
+Generating route types...
+✓ Types generated successfully
+
+Initialized a git repository.
+
+Success! Created temp-scaffold at D:\Webild\Creative portfolio\temp-scaffold
+

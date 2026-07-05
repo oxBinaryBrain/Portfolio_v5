@@ -1,0 +1,33 @@
+---
+pid: 21996
+cwd: "D:\Webild\Creative portfolio"
+command: "Set-Location \"D:\\Webild\\Creative portfolio\"; npm run build"
+started_at: 2026-07-05T13:29:55.997Z
+running_for_ms: 890007   
+---
+
+> creative-portfolio@0.1.0 build
+> next build
+
+▲ Next.js 16.2.10 (Turbopack)
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 17.0s
+  Running TypeScript ...
+  Finished TypeScript in 10.3s ...
+  Collecting page data using 6 workers ...
+  Generating static pages using 6 workers (0/5) ...
+  Generating static pages using 6 workers (1/5) 
+  Generating static pages using 6 workers (2/5) 
+  Generating static pages using 6 workers (3/5) 
+✓ Generating static pages using 6 workers (5/5) in 676ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+└ ○ /projects
+
+
+○  (Static)  prerendered as static content
+
